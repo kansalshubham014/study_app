@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4ef">
+  <title>Study Desk</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/front-page.css">
+  <link rel="stylesheet" href="/static/library-list.css">
+  <link rel="stylesheet" href="/static/polish.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Study Desk home">
+        <span class="brand-mark">S</span><span>Study Desk</span>
+      </a>
+      <div class="side-label">YOUR SPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" data-view="library" aria-current="page"><span aria-hidden="true">▤</span> Library <b id="library-count">0</b></button>
+        <button class="nav-item" data-view="study"><span>⌕</span> Ask your library</button>
+        <button class="nav-item" data-view="materials"><span>✧</span> Study materials</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-card" role="status" aria-live="polite"><span class="dot" id="ollama-dot"></span><div><strong id="ollama-label">Checking local AI</strong><small id="ollama-detail">Your files stay on this computer</small></div></div>
+        <a class="side-link" href="/docs" target="_blank" rel="noreferrer">API reference ↗</a>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div><div class="eyebrow">PRIVATE LEARNING SPACE</div><h1 id="page-title">Your library</h1></div>
+        <div class="top-actions"><span class="privacy-pill"><span>●</span> Stored locally</span><button class="button button-danger" id="top-delete" disabled>Delete selected</button><button class="button button-primary" id="top-upload">＋ Add documents</button></div>
+      </header>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+      <section id="view-library" class="view active">
+        <div class="welcome-row">
+          <div class="hero-copy"><span class="hero-kicker">YOUR LOCAL STUDY SPACE</span><h2>Your materials,<br>ready to study.</h2><p>Bring your course files together. Find the explanations you need, then turn them into revision material.</p><div class="hero-actions"><button class="button button-primary" id="hero-ask">Ask your library <span>→</span></button><button class="button button-light" id="hero-add">Add course files</button></div></div>
+          <div class="hero-side"><div class="hero-preview"><div class="preview-head"><span class="preview-mark">S</span><div><strong>Study Library</strong><small>Everything in one place</small></div><span class="preview-dot"></span></div><div class="preview-document"><span class="preview-file-icon">PDF</span><div><strong>Course notes</strong><small>Ready to search</small></div><span class="preview-check">✓</span></div><div class="preview-document preview-document-soft"><span class="preview-file-icon docx-icon">DOC</span><div><strong>Lecture guide</strong><small>Part of your study space</small></div></div><div class="preview-search"><span>⌕</span><i></i><i></i><i></i></div></div><div class="stat-pair"><div><strong id="doc-stat">0</strong><span>documents</span></div><div><strong id="chunk-stat">0</strong><span>indexed passages</span></div></div></div>
+        </div>
+        <div class="upload-zone" id="drop-zone" role="region" aria-label="File upload area">
+          <input id="file-input" type="file" accept=".pdf,.docx" multiple hidden>
+          <div class="upload-icon">↑</div>
+          <div><strong>Drop your study files here</strong><p>PDF and DOCX · up to 20 MB each</p></div>
+          <button class="button button-light" id="choose-files">Choose files</button>
+          <div class="upload-progress" id="upload-progress" role="status" aria-live="polite" style="position:static;height:auto;background:transparent;color:#63746a;font-size:10px;margin-left:3px" hidden></div>
+        </div>
+        <div class="toolbar">
+          <div><h2>Documents</h2><p class="muted">Select items to study together or add them to a collection.</p></div>
+          <div class="toolbar-controls"><input class="search-input" id="library-filter" type="search" aria-label="Filter documents" placeholder="Filter library…"><button class="button button-light" id="index-selected">Index selected</button></div>
+        </div>
+        <div class="library-layout">
+          <div class="document-list" id="document-list"><div class="empty-state">Your library is ready when you are. Add a PDF or DOCX to begin.</div></div>
+          <aside class="organize-panel">
+            <div class="panel-heading"><div><h3>Collections</h3><p>Group files for a focused study session. Add a file from its options or select files and use + selected.</p></div><button class="icon-button" id="add-collection" aria-label="Create collection">＋</button></div>
+            <div id="collection-list" class="collection-list"></div>
+            <section class="backup-panel" aria-labelledby="backup-heading">
+              <div><h3 id="backup-heading">Backup and restore</h3><p>Backups include your library and uploaded files. Restore from a downloaded Study Desk ZIP; safety copies are kept in data/backups.</p></div>
+              <div class="backup-actions"><button class="tiny-button" id="backup-download">Download backup</button><button class="tiny-button" id="restore-choose">Restore backup</button></div>
+              <input id="restore-file" type="file" accept=".zip,application/zip" hidden>
+            </section>
+          </aside>
+        </div>
+        <div id="unregistered-panel" class="unregistered-panel" hidden></div>
+      </section>
+
+      <section id="view-study" class="view">
+        <div class="study-intro"><div class="eyebrow">GROUNDED IN YOUR FILES</div><h2>Study across your library</h2><p>Choose documents or a collection. Index them once, then ask questions, find passages, or make revision material.</p></div>
+        <div class="study-card">
+          <div class="scope-row"><label for="scope-collection">Study scope</label><select id="scope-collection"><option value="">Selected documents</option></select><span id="selected-count" class="muted">0 selected</span></div>
+          <div class="selected-chips" id="selected-chips"><span class="muted">Select documents in your Library, or choose a collection.</span></div>
+          <div class="ask-row"><textarea id="study-query" aria-label="Ask a question about your library" rows="3" maxlength="4000" placeholder="Ask a question, e.g. How do the two chapters explain working memory?"></textarea><button class="button button-primary" id="ask-button">Ask</button></div>
+          <div class="study-query-actions"><button class="button button-light" id="search-button">Find passages</button></div>
+          <section class="study-tools-panel" aria-labelledby="study-tools-title">
+            <div class="study-tools-heading"><div><h3 id="study-tools-title">Make study materials</h3><p>Choose a format. You can focus each set on a topic or key idea.</p></div><input id="material-topic" aria-label="Optional topic for study materials" placeholder="Focus (optional), e.g. key definitions"></div>
+            <div class="study-tool-grid">
+              <article class="study-tool-card"><div class="study-tool-icon">▤</div><h4>Flashcards</h4><p>Review important terms and answers.</p><button class="button button-light" id="flashcards-button">Make flashcards</button></article>
+              <article class="study-tool-card quiz-tool-card"><div class="study-tool-icon">✓</div><h4>Quiz</h4><p>Practice and review what you know.</p><label class="quiz-count-control"><span>Questions</span><select id="quiz-count" aria-label="Number of quiz questions"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option><option value="50">50</option></select></label><details class="quiz-settings"><summary>Question type and difficulty</summary><label>Question type<select id="quiz-format"><option value="multiple_choice">Multiple choice</option><option value="short_answer">Short answer</option><option value="fill_blank">Fill in the blank</option></select></label><label>Difficulty<select id="quiz-difficulty"><option value="balanced">Balanced</option><option value="challenging">Challenging</option></select></label></details><button class="button button-primary" id="quiz-button">Build a quiz</button></article>
+              <article class="study-tool-card"><div class="study-tool-icon">≡</div><h4>Study guide</h4><p>Organize key ideas, terms, and review questions.</p><button class="button button-light" id="guide-button">Make a study guide</button></article>
+              <article class="study-tool-card"><div class="study-tool-icon">⌘</div><h4>Concept map</h4><p>Explore how ideas connect across your sources.</p><button class="button button-light" id="concept-map-button">Map concepts</button></article>
+            </div>
+          </section>
+          <div id="study-output" class="study-output"></div>
+        </div>
+      </section>
+
+      <section id="view-materials" class="view">
+        <div class="study-intro"><div class="eyebrow">YOUR REVISION SETS</div><h2>Study materials</h2><p>Study guides, concept maps, flashcards, and quizzes generated from your sources.</p></div>
+        <div class="materials-layout"><div class="materials-list" id="materials-list"></div><div class="material-detail" id="material-detail"><div class="empty-state">Choose a saved set to start reviewing.</div></div></div>
+      </section>
+
+      <footer class="footer-note">Your documents and study history are stored in the local project database. AI requests go to the Ollama service configured on this computer.</footer>
+    </main>
+  </div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
