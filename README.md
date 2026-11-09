@@ -57,16 +57,15 @@ Copy `.env.example` to `.env` if you need to change Ollama settings:
 Copy-Item .env.example .env
 ```
 
-Keep `.env` private. Before publishing a repository, make sure it does not include personal documents, database files, backups, or your Python environment.
 
 ## Run
 
-Double-click `run_study_app.bat`. It starts the local server if needed and opens Study Desk in your default browser. The app is available at [http://127.0.0.1:8000](http://127.0.0.1:8000), and the interactive API reference is at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
+Double-click `run_study_app.bat`. It starts the local server if needed and opens Study Desk in your default browser. The app is available at your local server.
 
 You can also start it from PowerShell:
 
 ```powershell
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --host localhost--port 8000
 ```
 
 ## First use
