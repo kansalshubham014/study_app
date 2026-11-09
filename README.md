@@ -92,10 +92,6 @@ The web app binds to `127.0.0.1` by default, so it is available only from the sa
 - Ollama availability, model quality, response time, and practical quiz size depend on your installed model and computer.
 - Short-answer quiz responses are self-assessed. Fill-in-the-blank checks may not accept every valid alternative wording.
 
-## Documentation
-
-- [Product Requirements Document](docs/PRD.md) ([PDF](docs/PRD.pdf), [Word](docs/PRD.docx))
-- [Challenges and Fixes](docs/CHALLENGES-AND-FIXES.md) ([PDF](docs/CHALLENGES-AND-FIXES.pdf), [Word](docs/CHALLENGES-AND-FIXES.docx))
 - [Codebase Guide](docs/CODEBASE-GUIDE.md) ([PDF](docs/CODEBASE-GUIDE.pdf), [Word](docs/CODEBASE-GUIDE.docx))
 
 ## License
